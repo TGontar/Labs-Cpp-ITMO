@@ -1,0 +1,16 @@
+# ninja log v5
+9	702	7012863728693460	CMakeFiles/Lab3.dir/main.cpp.obj	a912b3a22ba0c8f4
+19	706	7012863728693460	CMakeFiles/Lab3.dir/customqueue/customqueue.cpp.obj	df528254a686d644
+39	707	7012863728703442	CMakeFiles/Lab3.dir/matrix/testmatrix.cpp.obj	dda484cc3670b273
+31	708	7012863728733341	CMakeFiles/Lab3.dir/customqueue/testqueue.cpp.obj	d4e071263cc8e82
+1	718	7012863728892916	CMakeFiles/Lab3.dir/matrix/matrix.cpp.obj	ac3918ba5bd9178d
+8	505	7012865964571038	CMakeFiles/Lab3.dir/matrix/testmatrix.cpp.obj	dda484cc3670b273
+28	524	7012865964762032	CMakeFiles/Lab3.dir/main.cpp.obj	a912b3a22ba0c8f4
+39	553	7012865965051282	CMakeFiles/Lab3.dir/customqueue/customqueue.cpp.obj	df528254a686d644
+16	560	7012865965111111	CMakeFiles/Lab3.dir/matrix/matrix.cpp.obj	ac3918ba5bd9178d
+3	386	7012866585516402	CMakeFiles/Lab3.dir/matrix/testmatrix.cpp.obj	dda484cc3670b273
+15	407	7012866585677760	CMakeFiles/Lab3.dir/customqueue/testqueue.cpp.obj	d4e071263cc8e82
+9	430	7012866585966869	CMakeFiles/Lab3.dir/main.cpp.obj	a912b3a22ba0c8f4
+430	555	7012866587181493	Lab3.exe	7c960d9460d784ef
+5	356	7012868602117438	CMakeFiles/Lab3.dir/matrix/matrix.cpp.obj	ac3918ba5bd9178d
+357	477	7012868603302550	Lab3.exe	7c960d9460d784ef
