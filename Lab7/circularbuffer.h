@@ -20,64 +20,50 @@ private:
 public:
     class Custom_iterator : public iterator<std::random_access_iterator_tag, T> {
     private:
-        T *ptr;
+        T *buff;
+        int size{};
+        int current{};
     public:
-        //default constructor
-        explicit Custom_iterator() = default;
-
-        //constructor with given pointer
-        explicit Custom_iterator(T *p) {
-            ptr = p;
-        }
-
-        //constructor of copying
-        Custom_iterator(const Custom_iterator &other) {
-            ptr = other.ptr;
-        }
-
-        //overloading assignment operator
-        Custom_iterator &operator=(const Custom_iterator &other) {
-            if (this == other) {
-                return *this;
-            }
-
-            ptr = other.ptr;
-
+        //constructor
+        explicit Custom_iterator(T *buff, int capacity, int current) {
+            this->buff = buff;
+            this->size = capacity;
+            this->current = current;
         }
 
         //overloading plus operator
         Custom_iterator &operator+(T value) {
-            ptr += value;
+            current = (current + value) % size;
             return *this;
         }
 
         //overloading minus operator
         Custom_iterator &operator-(T value) {
-            ptr -= value;
+            current = (current + size - value) % size;
             return *this;
         }
 
         //overloading minus operator with another iterator
-        typename std::iterator<std::random_access_iterator_tag, T>::difference_type operator-(const Custom_iterator &other) const {
-            return ptr - other.ptr;
+        typename std::iterator<std::random_access_iterator_tag, T>::difference_type
+        operator-(const Custom_iterator &other) const {
+            return &buff[current] - &buff[other.current];
         }
-
 
         //overloading increment operator
         Custom_iterator &operator++() {
-            ptr += 1;
+            current = (current + 1) % size;
             return *this;
         }
 
-        //overloading increment operator
+        //overloading decrement operator
         Custom_iterator &operator--() {
-            ptr -= 1;
+            current = (current + size - 1) % size;
             return *this;
         }
 
         //overloading equality operator
         bool operator==(const Custom_iterator &other) const {
-            if (ptr == other.ptr) {
+            if (current == other.current) {
                 return true;
             } else {
                 return false;
@@ -86,43 +72,7 @@ public:
 
         //overloading inequality operator
         bool operator!=(const Custom_iterator &other) const {
-            if (ptr != other.ptr) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        //overloading "less" operator
-        bool operator<(const Custom_iterator &other) const {
-            if (ptr < other.ptr) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        //overloading "less or equal" operator
-        bool operator<=(const Custom_iterator &other) const {
-            if (ptr <= other.ptr) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        //overloading "more" operator
-        bool operator>(const Custom_iterator &other) const {
-            if (ptr > other.ptr) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        //overloading "more or equal" operator
-        bool operator>=(const Custom_iterator &other) const {
-            if (ptr >= other.ptr) {
+            if (current != other.current) {
                 return true;
             } else {
                 return false;
@@ -131,14 +81,8 @@ public:
 
         //overloading dereferencing operator
         T &operator*() const {
-            return *ptr;
+            return buff[current];
         }
-
-        //overloading arrow operator
-        T *operator->() const {
-            return ptr;
-        }
-
     };
 
     //default constructor
@@ -155,17 +99,17 @@ public:
 
     //destructor with deleting dynamic object
     ~CircularBuffer() {
-        delete [] buffer;
+        delete[] buffer;
     }
 
     //begin iterator
     Custom_iterator begin() {
-        return Custom_iterator(buffer);
+        return Custom_iterator(buffer, capacity, head);
     }
 
     //end iterator
     Custom_iterator end() {
-        return Custom_iterator(buffer + capacity);
+        return Custom_iterator(buffer, capacity, tail);
     }
 
     //push back method
@@ -260,30 +204,7 @@ public:
             buffer[(i + 1) % capacity] = buffer[i % capacity];
         }
 
-        buffer[index + 1] = val;
-
-        if (cursize == capacity) {
-            if (head == capacity - 1) {
-                head = 0;
-            } else {
-                head += 1;
-            }
-
-            if (tail == capacity - 1) {
-                tail = 0;
-            } else {
-                tail += 1;
-            }
-        } else {
-            cursize += 1;
-
-            if (tail == capacity - 1) {
-                tail = 0;
-            } else {
-                tail += 1;
-            }
-        }
-
+        buffer[index] = val;
     }
 
     //remove from the buffer
@@ -293,21 +214,12 @@ public:
         }
 
         int index = std::distance(begin(), it);
-        for (int i = index; i != tail; i == capacity - 1 ? i = 0 : i++) {
-            buffer[i % capacity] = buffer[(i + 1) % capacity];
-        }
 
-        cursize -= 1;
-
-        if (tail == 0) {
-            tail = capacity - 1;
-        } else {
-            tail -= 1;
-        }
+        buffer[index] = {};
     }
 
     //overloading indexing operator
-    T &operator[] (int ind) const {
+    T &operator[](int ind) const {
         return buffer[ind % capacity];
     }
 
@@ -317,12 +229,12 @@ public:
             throw "New capacity should be more than current one";
         }
 
-        T *newbuff = new T[newcapacity] {};
+        T *newbuff = new T[newcapacity]{};
         for (int i = 0; i < capacity; i++) {
             newbuff[i] = buffer[i];
         }
 
-        delete [] buffer;
+        delete[] buffer;
         buffer = newbuff;
         head = 0;
         tail = capacity - 1;

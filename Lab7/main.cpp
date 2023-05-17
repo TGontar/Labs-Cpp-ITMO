@@ -28,7 +28,8 @@ int main() {
     buff1.set_capacity(10);
     buff1.print_buffer();
 
-    buff1.insert(buff1.begin() + 2, 10);
+    auto it1 = CircularBuffer<int>::Custom_iterator(buff1.begin());
+    buff1.insert(it1, 10);
     buff1.print_buffer();
     buff1.remove(buff1.begin() + 4);
     buff1.print_buffer();
