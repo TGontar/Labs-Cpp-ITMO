@@ -200,10 +200,6 @@ public:
     void insert(Custom_iterator it, T val) {
         int index = it - begin();
 
-        for (int i = tail; i != index; i == 0 ? i = capacity - 1 : i--) {
-            buffer[(i + 1) % capacity] = buffer[i % capacity];
-        }
-
         buffer[index] = val;
     }
 
@@ -213,7 +209,7 @@ public:
             throw std::out_of_range("Can't remove from empty buffer");
         }
 
-        int index = std::distance(begin(), it);
+        int index = it - begin();
 
         buffer[index] = {};
     }
